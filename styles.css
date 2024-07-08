@@ -58,17 +58,21 @@ button:hover {
 }
 
 #options button {
-    margin: 5px;
-    padding: 10px 20px;
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 10px;
     font-size: 18px;
     border: 1px solid #FF5722;
     border-radius: 5px;
     background-color: #fff;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 #options button:hover {
-    background-color: #f0f0f0;
+    background-color: #FF5722;
+    color: #fff;
 }
 
 #timer {
