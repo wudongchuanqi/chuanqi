@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学口算游戏</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>数学口算游戏</h1>
+        <div class="game">
+            <div id="question">题目</div>
+            <input type="text" id="answer" placeholder="请输入答案">
+            <button onclick="checkAnswer()">提交答案</button>
+            <div id="timer">剩余时间：<span id="time">30</span>秒</div>
+            <div id="score">得分：<span id="points">0</span></div>
+        </div>
+        <button onclick="startGame()">开始游戏</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
