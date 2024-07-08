@@ -41,7 +41,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                     answer = num1 - num2;
                     break;
                 case 'multiplication':
-                    question = `${num1} * ${num2}`;
+                    question = `${num1} × ${num2}`;
                     answer = num1 * num2;
                     break;
                 case 'division':
@@ -50,7 +50,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                     answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                     break;
                 case 'mixed':
-                    const ops = ['+', '-', '*', '÷'];
+                    const ops = ['+', '-', '×', '÷'];
                     const op = ops[Math.floor(Math.random() * ops.length)];
                     switch (op) {
                         case '+':
@@ -61,8 +61,8 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                             question = `${num1} - ${num2}`;
                             answer = num1 - num2;
                             break;
-                        case '*':
-                            question = `${num1} * ${num2}`;
+                        case '×':
+                            question = `${num1} × ${num2}`;
                             answer = num1 * num2;
                             break;
                         case '÷':
@@ -73,7 +73,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                     }
                     break;
             }
-        } while (!allowNegative && answer < 0 || answer > resultRange);
+        } while ((!allowNegative && answer < 0) || answer > resultRange);
 
         const options = generateOptions(answer, resultRange, allowDecimals);
         questions.push({ question, answer, options });
@@ -133,34 +133,28 @@ function checkAnswer(selectedAnswer) {
     clearInterval(timer);
     const currentQuestion = questions[currentQuestionIndex];
     const feedback = document.getElementById('feedback');
-    
     if (selectedAnswer === currentQuestion.answer) {
-        feedback.innerText = '正确！';
+        feedback.innerText = '正确!';
         score++;
     } else {
-        feedback.innerText = '错误！';
+        feedback.innerText = `错误! 正确答案是 ${currentQuestion.answer}`;
     }
-    
-    currentQuestionIndex++;
-    
-    if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 1000);
-    } else {
-        setTimeout(showScore, 1000);
-    }
+    setTimeout(nextQuestion, 1000);
 }
 
 function nextQuestion() {
-    document.getElementById('feedback').innerText = '';
+    currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
         showQuestion();
     } else {
-        showScore();
+        endGame();
     }
 }
 
-function showScore() {
-    document.getElementById('game').style.display = 'none';
+function endGame() {
+    const totalQuestions = questions.length;
+    const percentage = Math.round((score / totalQuestions) * 100);
+    alert(`游戏结束! 你的得分是 ${score} / ${totalQuestions}. 正确率: ${percentage}%`);
     document.getElementById('settingsForm').style.display = 'block';
-    alert(`游戏结束！您的得分是：${score}/${questions.length}`);
+    document.getElementById('game').style.display = 'none';
 }
