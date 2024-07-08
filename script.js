@@ -7,10 +7,13 @@ let timePerQuestion;
 function startGame() {
     const operation = document.getElementById('operation').value;
     const range = parseInt(document.getElementById('range').value);
+    const resultRange = parseInt(document.getElementById('resultRange').value);
     const numQuestions = parseInt(document.getElementById('numQuestions').value);
     timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
+    const allowDecimals = document.getElementById('allowDecimals').checked;
+    const allowNegative = document.getElementById('allowNegative').checked;
     
-    questions = generateQuestions(operation, range, numQuestions);
+    questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
     score = 0;
     
@@ -19,42 +22,74 @@ function startGame() {
     showQuestion();
 }
 
-function generateQuestions(operation, range, numQuestions) {
+function generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative) {
     const questions = [];
     for (let i = 0; i < numQuestions; i++) {
-        const num1 = Math.floor(Math.random() * (range + 1));
-        const num2 = Math.floor(Math.random() * (range + 1));
         let question, answer;
-        
-        switch (operation) {
-            case 'addition':
-                question = `${num1} + ${num2}`;
-                answer = num1 + num2;
-                break;
-            case 'subtraction':
-                question = `${num1} - ${num2}`;
-                answer = num1 - num2;
-                break;
-            case 'multiplication':
-                question = `${num1} * ${num2}`;
-                answer = num1 * num2;
-                break;
-            case 'division':
-                question = `${num1} / ${num2}`;
-                answer = parseFloat((num1 / num2).toFixed(2));
-                break;
-        }
-        
-        const options = generateOptions(answer, range);
+        let num1, num2;
+
+        do {
+            num1 = Math.floor(Math.random() * (range + 1));
+            num2 = Math.floor(Math.random() * (range + 1));
+            switch (operation) {
+                case 'addition':
+                    question = `${num1} + ${num2}`;
+                    answer = num1 + num2;
+                    break;
+                case 'subtraction':
+                    question = `${num1} - ${num2}`;
+                    answer = num1 - num2;
+                    break;
+                case 'multiplication':
+                    question = `${num1} * ${num2}`;
+                    answer = num1 * num2;
+                    break;
+                case 'division':
+                    num2 = num2 === 0 ? 1 : num2; // Avoid division by zero
+                    question = `${num1} ÷ ${num2}`;
+                    answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
+                    break;
+                case 'mixed':
+                    const ops = ['+', '-', '*', '÷'];
+                    const op = ops[Math.floor(Math.random() * ops.length)];
+                    switch (op) {
+                        case '+':
+                            question = `${num1} + ${num2}`;
+                            answer = num1 + num2;
+                            break;
+                        case '-':
+                            question = `${num1} - ${num2}`;
+                            answer = num1 - num2;
+                            break;
+                        case '*':
+                            question = `${num1} * ${num2}`;
+                            answer = num1 * num2;
+                            break;
+                        case '÷':
+                            num2 = num2 === 0 ? 1 : num2; // Avoid division by zero
+                            question = `${num1} ÷ ${num2}`;
+                            answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
+                            break;
+                    }
+                    break;
+            }
+        } while (!allowNegative && answer < 0 || answer > resultRange);
+
+        const options = generateOptions(answer, resultRange, allowDecimals);
         questions.push({ question, answer, options });
     }
     return questions;
 }
 
-function generateOptions(correctAnswer, range) {
+function generateOptions(correctAnswer, range, allowDecimals) {
     const options = [correctAnswer];
     while (options.length < 3) {
-        const option = Math.floor(Math.random() * (range + 1) * 2);
+        let option;
+        if (allowDecimals) {
+            option = parseFloat((Math.random() * range).toFixed(2));
+        } else {
+            option = Math.floor(Math.random() * (range + 1));
+        }
         if (!options.includes(option)) {
             options.push(option);
         }
