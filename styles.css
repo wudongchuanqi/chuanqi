@@ -1,19 +1,51 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #f9f9f9;
     margin: 0;
 }
 
 .container {
     text-align: center;
+    max-width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
 }
 
-#settingsForm {
-    margin-bottom: 20px;
+h1 {
+    color: #FF5722;
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input, form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #FF5722;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #E64A19;
 }
 
 #game {
@@ -29,6 +61,14 @@ body {
     margin: 5px;
     padding: 10px 20px;
     font-size: 18px;
+    border: 1px solid #FF5722;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#options button:hover {
+    background-color: #f0f0f0;
 }
 
 #timer {
