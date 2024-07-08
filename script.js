@@ -96,7 +96,6 @@ function generateOptions(correctAnswer, range, allowDecimals) {
     }
     return options.sort(() => Math.random() - 0.5);
 }
-
 function showQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
     document.getElementById('question').innerText = currentQuestion.question;
@@ -123,38 +122,38 @@ function startTimer() {
             timeLeft--;
             document.getElementById('time').innerText = timeLeft;
         } else {
-            clearInterval(timer);
-            checkAnswer(null); // Timeout without answering
+            checkAnswer(null); // Times up, no answer selected
         }
     }, 1000);
 }
 
-function checkAnswer(selectedAnswer) {
+function checkAnswer(selectedOption) {
     clearInterval(timer);
+    
     const currentQuestion = questions[currentQuestionIndex];
     const feedback = document.getElementById('feedback');
-    if (selectedAnswer === currentQuestion.answer) {
-        feedback.innerText = '正确!';
+    
+    if (selectedOption === currentQuestion.answer) {
         score++;
+        feedback.innerText = '正确!';
+        feedback.style.color = 'green';
     } else {
-        feedback.innerText = `错误! 正确答案是 ${currentQuestion.answer}`;
+        feedback.innerText = `错误! 正确答案是: ${currentQuestion.answer}`;
+        feedback.style.color = 'red';
     }
-    setTimeout(nextQuestion, 1000);
-}
-
-function nextQuestion() {
+    
     currentQuestionIndex++;
+    
     if (currentQuestionIndex < questions.length) {
-        showQuestion();
+        setTimeout(showQuestion, 2000); // Show next question after 2 seconds
     } else {
-        endGame();
+        setTimeout(endGame, 2000); // End game after 2 seconds
     }
 }
 
 function endGame() {
-    const totalQuestions = questions.length;
-    const percentage = Math.round((score / totalQuestions) * 100);
-    alert(`游戏结束! 你的得分是 ${score} / ${totalQuestions}. 正确率: ${percentage}%`);
-    document.getElementById('settingsForm').style.display = 'block';
     document.getElementById('game').style.display = 'none';
+    const result = document.createElement('div');
+    result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${score}/${questions.length}</p>`;
+    document.body.appendChild(result);
 }
