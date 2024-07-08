@@ -1,11 +1,14 @@
 let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
+let timer;
+let timePerQuestion;
 
 function startGame() {
     const operation = document.getElementById('operation').value;
     const range = parseInt(document.getElementById('range').value);
     const numQuestions = parseInt(document.getElementById('numQuestions').value);
+    timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
     
     questions = generateQuestions(operation, range, numQuestions);
     currentQuestionIndex = 0;
@@ -19,8 +22,8 @@ function startGame() {
 function generateQuestions(operation, range, numQuestions) {
     const questions = [];
     for (let i = 0; i < numQuestions; i++) {
-        const num1 = Math.floor(Math.random() * range) + 1;
-        const num2 = Math.floor(Math.random() * range) + 1;
+        const num1 = Math.floor(Math.random() * (range + 1));
+        const num2 = Math.floor(Math.random() * (range + 1));
         let question, answer;
         
         switch (operation) {
@@ -42,16 +45,16 @@ function generateQuestions(operation, range, numQuestions) {
                 break;
         }
         
-        const options = generateOptions(answer);
+        const options = generateOptions(answer, range);
         questions.push({ question, answer, options });
     }
     return questions;
 }
 
-function generateOptions(correctAnswer) {
+function generateOptions(correctAnswer, range) {
     const options = [correctAnswer];
     while (options.length < 3) {
-        const option = Math.floor(Math.random() * (correctAnswer * 2)) + 1;
+        const option = Math.floor(Math.random() * (range + 1) * 2);
         if (!options.includes(option)) {
             options.push(option);
         }
@@ -71,9 +74,28 @@ function showQuestion() {
         button.onclick = () => checkAnswer(option);
         optionsContainer.appendChild(button);
     });
+    
+    document.getElementById('feedback').innerText = '';
+    startTimer();
+}
+
+function startTimer() {
+    let timeLeft = timePerQuestion;
+    document.getElementById('time').innerText = timeLeft;
+    
+    timer = setInterval(() => {
+        if (timeLeft > 0) {
+            timeLeft--;
+            document.getElementById('time').innerText = timeLeft;
+        } else {
+            clearInterval(timer);
+            checkAnswer(null); // Timeout without answering
+        }
+    }, 1000);
 }
 
 function checkAnswer(selectedAnswer) {
+    clearInterval(timer);
     const currentQuestion = questions[currentQuestionIndex];
     const feedback = document.getElementById('feedback');
     
