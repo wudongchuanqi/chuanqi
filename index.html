@@ -16,13 +16,20 @@
                 <option value="subtraction">减法</option>
                 <option value="multiplication">乘法</option>
                 <option value="division">除法</option>
+                <option value="mixed">混合运算</option>
             </select>
             <label for="range">选择数字范围:</label>
             <input type="number" id="range" min="1" value="10">
+            <label for="resultRange">选择结果范围:</label>
+            <input type="number" id="resultRange" min="1" value="10">
             <label for="numQuestions">选择题目数量:</label>
             <input type="number" id="numQuestions" min="1" value="10">
             <label for="timePerQuestion">每题答题时间（秒）:</label>
             <input type="number" id="timePerQuestion" min="1" value="10">
+            <label for="allowDecimals">允许小数:</label>
+            <input type="checkbox" id="allowDecimals">
+            <label for="allowNegative">允许负数:</label>
+            <input type="checkbox" id="allowNegative">
             <button type="button" onclick="startGame()">开始游戏</button>
         </form>
         <div id="game" style="display:none;">
