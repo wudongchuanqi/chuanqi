@@ -12,14 +12,15 @@ function startGame() {
     timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
     const allowDecimals = document.getElementById('allowDecimals').checked;
     const allowNegative = document.getElementById('allowNegative').checked;
-    
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
     score = 0;
-    
+
     document.getElementById('settingsForm').style.display = 'none';
     document.getElementById('game').style.display = 'block';
-    showQuestion();
+    showQuestion(mode);
 }
 
 function generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative) {
@@ -96,19 +97,31 @@ function generateOptions(correctAnswer, range, allowDecimals) {
     }
     return options.sort(() => Math.random() - 0.5);
 }
-function showQuestion() {
+function showQuestion(mode) {
     const currentQuestion = questions[currentQuestionIndex];
     document.getElementById('question').innerText = currentQuestion.question;
     const optionsContainer = document.getElementById('options');
     optionsContainer.innerHTML = '';
-    
-    currentQuestion.options.forEach(option => {
+
+    if (mode === 'select') {
+        currentQuestion.options.forEach(option => {
+            const button = document.createElement('button');
+            button.innerText = option;
+            button.onclick = () => checkAnswer(option, mode);
+            optionsContainer.appendChild(button);
+        });
+    } else {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.id = 'answerInput';
+        optionsContainer.appendChild(input);
+
         const button = document.createElement('button');
-        button.innerText = option;
-        button.onclick = () => checkAnswer(option);
+        button.innerText = '提交';
+        button.onclick = () => checkAnswer(parseFloat(input.value), mode);
         optionsContainer.appendChild(button);
-    });
-    
+    }
+
     document.getElementById('feedback').innerText = '';
     startTimer();
 }
@@ -116,7 +129,7 @@ function showQuestion() {
 function startTimer() {
     let timeLeft = timePerQuestion;
     document.getElementById('time').innerText = timeLeft;
-    
+
     timer = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
@@ -127,12 +140,12 @@ function startTimer() {
     }, 1000);
 }
 
-function checkAnswer(selectedOption) {
+function checkAnswer(selectedOption, mode) {
     clearInterval(timer);
-    
+
     const currentQuestion = questions[currentQuestionIndex];
     const feedback = document.getElementById('feedback');
-    
+
     if (selectedOption === currentQuestion.answer) {
         score++;
         feedback.innerText = '正确!';
@@ -141,19 +154,18 @@ function checkAnswer(selectedOption) {
         feedback.innerText = `错误! 正确答案是: ${currentQuestion.answer}`;
         feedback.style.color = 'red';
     }
-    
+
     currentQuestionIndex++;
-    
     if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 2000); // Show next question after 2 seconds
+        setTimeout(() => showQuestion(mode), 1000);
     } else {
-        setTimeout(endGame, 2000); // End game after 2 seconds
+        endGame();
     }
 }
 
 function endGame() {
+    const correctRate = ((score / questions.length) * 100).toFixed(2);
+    alert(`游戏结束! 你的得分是: ${score}/${questions.length} (${correctRate}%)`);
+    document.getElementById('settingsForm').style.display = 'block';
     document.getElementById('game').style.display = 'none';
-    const result = document.createElement('div');
-    result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${score}/${questions.length}</p>`;
-    document.body.appendChild(result);
 }
