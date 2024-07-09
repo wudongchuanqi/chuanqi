@@ -3,7 +3,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timer;
 let timePerQuestion;
-let mode; 
+let mode;
 
 // 历史统计数据
 let history = JSON.parse(localStorage.getItem('history')) || [];
