@@ -31,6 +31,8 @@ function showQuestion() {
     optionsContainer.innerHTML = '';
 
     if (mode === 'selection') {
+        optionsContainer.classList.add('selection-mode');
+        optionsContainer.classList.remove('answer-mode');
         currentQuestion.options.forEach(option => {
             const button = document.createElement('button');
             button.innerText = option;
@@ -38,6 +40,8 @@ function showQuestion() {
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
+        optionsContainer.classList.add('answer-mode');
+        optionsContainer.classList.remove('selection-mode');
         const button = document.createElement('button');
         button.innerText = currentQuestion.answer; // 只显示正确答案
         button.onclick = () => checkAnswer(currentQuestion.answer);
