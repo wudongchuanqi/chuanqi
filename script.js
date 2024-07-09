@@ -3,10 +3,9 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timer;
 let timePerQuestion;
-let mode;
+let mode; // 增加模式变量
 
 function startGame() {
-    console.log('开始游戏按钮被点击');
     const operation = document.getElementById('operation').value;
     const range = parseInt(document.getElementById('range').value);
     const resultRange = parseInt(document.getElementById('resultRange').value);
@@ -14,7 +13,7 @@ function startGame() {
     timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
     const allowDecimals = document.getElementById('allowDecimals').checked;
     const allowNegative = document.getElementById('allowNegative').checked;
-    mode = document.getElementById('mode').value;
+    mode = document.querySelector('input[name="mode"]:checked').value; // 获取模式值
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
@@ -26,7 +25,6 @@ function startGame() {
 }
 
 function showQuestion() {
-    console.log('显示题目');
     const currentQuestion = questions[currentQuestionIndex];
     document.getElementById('question').innerText = currentQuestion.question;
     const optionsContainer = document.getElementById('options');
@@ -41,11 +39,8 @@ function showQuestion() {
         });
     } else if (mode === 'answer') {
         const button = document.createElement('button');
-        button.innerText = '点击查看答案';
-        button.onclick = () => {
-            button.innerText = currentQuestion.answer;
-            checkAnswer(currentQuestion.answer);
-        };
+        button.innerText = currentQuestion.answer; // 只显示正确答案
+        button.onclick = () => checkAnswer(currentQuestion.answer);
         optionsContainer.appendChild(button);
     }
 
@@ -54,27 +49,25 @@ function showQuestion() {
 }
 
 function startTimer() {
-    console.log('启动计时器');
     let timeLeft = timePerQuestion;
     document.getElementById('time').innerText = timeLeft;
-    
+
     timer = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
             document.getElementById('time').innerText = timeLeft;
         } else {
-            checkAnswer(null); // Times up, no answer selected
+            checkAnswer(null); // 时间到，没有选择答案
         }
     }, 1000);
 }
 
 function checkAnswer(selectedOption) {
-    console.log('检查答案');
     clearInterval(timer);
-    
+
     const currentQuestion = questions[currentQuestionIndex];
     const feedback = document.getElementById('feedback');
-    
+
     if (selectedOption === currentQuestion.answer) {
         score++;
         feedback.innerText = '正确!';
@@ -83,18 +76,17 @@ function checkAnswer(selectedOption) {
         feedback.innerText = `错误! 正确答案是: ${currentQuestion.answer}`;
         feedback.style.color = 'red';
     }
-    
+
     currentQuestionIndex++;
-    
+
     if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 2000); // Show next question after 2 seconds
+        setTimeout(showQuestion, 2000); // 2秒后显示下一个问题
     } else {
-        setTimeout(endGame, 2000); // End game after 2 seconds
+        setTimeout(endGame, 2000); // 2秒后结束游戏
     }
 }
 
 function endGame() {
-    console.log('游戏结束');
     document.getElementById('game').style.display = 'none';
     const result = document.createElement('div');
     result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${score}/${questions.length}</p>`;
@@ -102,7 +94,6 @@ function endGame() {
 }
 
 function generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative) {
-    console.log('生成题目');
     const questions = [];
     for (let i = 0; i < numQuestions; i++) {
         let question, answer;
@@ -111,17 +102,6 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
         do {
             num1 = Math.floor(Math.random() * (range + 1));
             num2 = Math.floor(Math.random() * (range + 1));
-            
-            if (allowDecimals) {
-                num1 += Math.random();
-                num2 += Math.random();
-            }
-            
-            if (allowNegative) {
-                if (Math.random() > 0.5) num1 = -num1;
-                if (Math.random() > 0.5) num2 = -num2;
-            }
-
             switch (operation) {
                 case 'addition':
                     question = `${num1} + ${num2}`;
@@ -132,18 +112,18 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                     answer = num1 - num2;
                     break;
                 case 'multiplication':
-                    question = `${num1} * ${num2}`;
+                    question = `${num1} × ${num2}`;
                     answer = num1 * num2;
                     break;
                 case 'division':
-                    if (num2 === 0) continue; // 防止除以零
-                    question = `${num1} / ${num2}`;
-                    answer = num1 / num2;
+                    num2 = num2 === 0 ? 1 : num2; // 避免除以0
+                    question = `${num1} ÷ ${num2}`;
+                    answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                     break;
                 case 'mixed':
-                    const operations = ['+', '-', '*', '/'];
-                    const randomOperation = operations[Math.floor(Math.random() * operations.length)];
-                    switch (randomOperation) {
+                    const ops = ['+', '-', '×', '÷'];
+                    const op = ops[Math.floor(Math.random() * ops.length)];
+                    switch (op) {
                         case '+':
                             question = `${num1} + ${num2}`;
                             answer = num1 + num2;
@@ -152,35 +132,38 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                             question = `${num1} - ${num2}`;
                             answer = num1 - num2;
                             break;
-                        case '*':
-                            question = `${num1} * ${num2}`;
+                        case '×':
+                            question = `${num1} × ${num2}`;
                             answer = num1 * num2;
                             break;
-                        case '/':
-                            if (num2 === 0) continue; // 防止除以零
-                            question = `${num1} / ${num2}`;
-                            answer = num1 / num2;
+                        case '÷':
+                            num2 = num2 === 0 ? 1 : num2; // 避免除以0
+                            question = `${num1} ÷ ${num2}`;
+                            answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                             break;
                     }
                     break;
             }
-        } while (Math.abs(answer) > resultRange);
+        } while ((!allowNegative && answer < 0) || answer > resultRange);
 
-        const options = [];
-        if (mode === 'selection') {
-            options.push(answer);
-            while (options.length < 4) {
-                let wrongAnswer;
-                do {
-                    wrongAnswer = Math.floor(Math.random() * (2 * resultRange + 1)) - resultRange;
-                    if (allowDecimals) wrongAnswer += Math.random();
-                } while (options.includes(wrongAnswer) || wrongAnswer === answer);
-                options.push(wrongAnswer);
-            }
-            options.sort(() => Math.random() - 0.5);
-        }
-
+        const options = generateOptions(answer, resultRange, allowDecimals);
         questions.push({ question, answer, options });
     }
     return questions;
+}
+
+function generateOptions(correctAnswer, range, allowDecimals) {
+    const options = [correctAnswer];
+    while (options.length < 3) {
+        let option;
+        if (allowDecimals) {
+            option = parseFloat((Math.random() * range).toFixed(2));
+        } else {
+            option = Math.floor(Math.random() * (range + 1));
+        }
+        if (!options.includes(option)) {
+            options.push(option);
+        }
+    }
+    return options.sort(() => Math.random() - 0.5);
 }
