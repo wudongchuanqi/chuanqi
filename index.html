@@ -18,9 +18,11 @@
                 <option value="division">除法</option>
                 <option value="mixed">混合运算</option>
             </select>
-            <label for="mode">选择模式:</label>
-            <input type="radio" id="modeAnswer" name="mode" value="answer" checked> 作答模式
-            <input type="radio" id="modeSelection" name="mode" value="selection"> 选择模式
+            <label for="mode">选择互动模式:</label>
+            <select id="mode">
+                <option value="answer">作答模式</option>
+                <option value="selection">选择模式</option>
+            </select>
             <label for="range">选择数字范围:</label>
             <input type="number" id="range" min="1" value="10">
             <label for="resultRange">选择结果范围:</label>
@@ -37,7 +39,7 @@
         </form>
         <div id="game" style="display:none;">
             <div id="question"></div>
-            <div id="options" class="options"></div>
+            <div id="options"></div>
             <div id="timer">剩余时间：<span id="time">0</span>秒</div>
             <div id="feedback"></div>
             <button onclick="nextQuestion()">下一题</button>
