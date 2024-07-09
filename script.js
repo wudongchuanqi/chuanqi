@@ -33,23 +33,12 @@ function showQuestion() {
     const optionsContainer = document.getElementById('options');
     optionsContainer.innerHTML = '';
 
-    if (mode === 'selection') {
-        currentQuestion.options.forEach(option => {
-            const button = document.createElement('button');
-            button.innerText = option;
-            button.onclick = () => checkAnswer(option);
-            optionsContainer.appendChild(button);
-        });
-    } else if (mode === 'answer') {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = 'userAnswer';
-        optionsContainer.appendChild(input);
+    currentQuestion.options.forEach(option => {
         const button = document.createElement('button');
-        button.innerText = '提交';
-        button.onclick = () => checkAnswer(input.value);
+        button.innerText = option;
+        button.onclick = () => checkAnswer(option);
         optionsContainer.appendChild(button);
-    }
+    });
 
     document.getElementById('feedback').innerText = '';
     startTimer();
@@ -64,7 +53,7 @@ function startTimer() {
             timeLeft--;
             document.getElementById('time').innerText = timeLeft;
         } else {
-            checkAnswer(null); 
+            checkAnswer(null);
         }
     }, 1000);
 }
@@ -87,9 +76,9 @@ function checkAnswer(selectedOption) {
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 2000); 
+        setTimeout(showQuestion, 2000);
     } else {
-        setTimeout(endGame, 2000); 
+        setTimeout(endGame, 2000);
     }
 }
 
@@ -175,7 +164,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
 
 function generateOptions(correctAnswer, range, allowDecimals) {
     const options = [correctAnswer];
-    while (options.length < 3) {
+    while (options.length < 4) {
         let option;
         if (allowDecimals) {
             option = parseFloat((Math.random() * range).toFixed(2));
