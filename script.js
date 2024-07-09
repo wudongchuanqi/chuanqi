@@ -3,7 +3,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timer;
 let timePerQuestion;
-let mode; // 增加模式变量
+let mode;
 
 function startGame() {
     const operation = document.getElementById('operation').value;
@@ -13,7 +13,7 @@ function startGame() {
     timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
     const allowDecimals = document.getElementById('allowDecimals').checked;
     const allowNegative = document.getElementById('allowNegative').checked;
-    mode = document.getElementById('mode').value; // 获取模式值
+    mode = document.getElementById('mode').value;
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
@@ -88,17 +88,18 @@ function checkAnswer(selectedOption) {
 
 function endGame() {
     document.getElementById('game').style.display = 'none';
+    const totalQuestions = questions.length;
+    const finalScore = (score / totalQuestions) * 100;
+    const accuracy = ((score / totalQuestions) * 100).toFixed(2);
     
-    // 计算正确率和每题平均得分
-    const 正确率 = (score / questions.length) * 100;
-    const 每题平均得分 = (score / questions.length) * 100;
-
-    // 显示结果
+    let encouragement = "";
+    if (finalScore === 100) {
+        const encouragements = ["太棒了！", "干得漂亮！", "你真是个数学天才！"];
+        encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+    }
+    
     const result = document.createElement('div');
-    result.innerHTML = `
-        <h2>游戏结束!</h2>
-        <p>你的得分是: ${score} / ${questions.length} (${正确率.toFixed(2)}%)</p>
-        <p>平均每题得分: ${每题平均得分.toFixed(2)}</p>`;
+    result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${finalScore}分，正确率为${accuracy}%</p><p>${encouragement}</p>`;
     document.body.appendChild(result);
 }
 
