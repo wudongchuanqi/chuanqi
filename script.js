@@ -3,10 +3,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timer;
 let timePerQuestion;
-let mode;
-
-// 历史统计数据
-let history = JSON.parse(localStorage.getItem('history')) || [];
+let mode; // 增加模式变量
 
 function startGame() {
     const operation = document.getElementById('operation').value;
@@ -16,7 +13,7 @@ function startGame() {
     timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
     const allowDecimals = document.getElementById('allowDecimals').checked;
     const allowNegative = document.getElementById('allowNegative').checked;
-    mode = document.getElementById('mode').value;
+    mode = document.getElementById('mode').value; // 获取模式值
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
@@ -38,16 +35,17 @@ function showQuestion() {
             const button = document.createElement('button');
             button.innerText = option;
             button.onclick = () => checkAnswer(option);
+            button.style.display = 'block';
+            button.style.margin = '10px 0';
+            button.style.padding = '10px';
+            button.style.fontSize = '16px';
+            button.style.width = '100%';
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = 'userAnswer';
-        optionsContainer.appendChild(input);
         const button = document.createElement('button');
-        button.innerText = '提交';
-        button.onclick = () => checkAnswer(input.value);
+        button.innerText = currentQuestion.answer; // 只显示正确答案
+        button.onclick = () => checkAnswer(currentQuestion.answer);
         optionsContainer.appendChild(button);
     }
 
@@ -64,7 +62,7 @@ function startTimer() {
             timeLeft--;
             document.getElementById('time').innerText = timeLeft;
         } else {
-            checkAnswer(null); 
+            checkAnswer(null); // Times up, no answer selected
         }
     }, 1000);
 }
@@ -75,7 +73,7 @@ function checkAnswer(selectedOption) {
     const currentQuestion = questions[currentQuestionIndex];
     const feedback = document.getElementById('feedback');
 
-    if (selectedOption == currentQuestion.answer) {
+    if (selectedOption === currentQuestion.answer) {
         score++;
         feedback.innerText = '正确!';
         feedback.style.color = 'green';
@@ -87,31 +85,37 @@ function checkAnswer(selectedOption) {
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 2000); 
+        setTimeout(showQuestion, 2000); // Show next question after 2 seconds
     } else {
-        setTimeout(endGame, 2000); 
+        setTimeout(endGame, 2000); // End game after 2 seconds
     }
 }
 
 function endGame() {
     document.getElementById('game').style.display = 'none';
-    const scorePercentage = (score / questions.length) * 100;
-    const finalScore = Math.round(scorePercentage);
-    const result = document.createElement('div');
-    let encouragement = '';
 
-    if (finalScore === 100) {
-        const messages = ['太棒了!', '优秀!', '满分，继续努力!'];
-        encouragement = messages[Math.floor(Math.random() * messages.length)];
+    const totalQuestions = questions.length;
+    const accuracy = ((score / totalQuestions) * 100).toFixed(2);
+    const totalScore = (score / totalQuestions * 100).toFixed(2);
+
+    let resultText = `你的得分是：${totalScore}分，正确率为${accuracy}%`;
+    if (totalScore === '100.00') {
+        const compliments = ['干得漂亮！', '太棒了！', '你真是个天才！', '完美！'];
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+        resultText += `<br>${randomCompliment}`;
     }
 
-    result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${finalScore}分，正确率为: ${scorePercentage.toFixed(2)}%</p><p>${encouragement}</p>`;
+    const result = document.createElement('div');
+    result.innerHTML = `<h2>游戏结束!</h2><p>${resultText}</p>`;
     document.body.appendChild(result);
 
-    history.push({ date: new Date().toLocaleString(), score: finalScore, accuracy: scorePercentage.toFixed(2) });
+    // 记录历史得分
+    const history = JSON.parse(localStorage.getItem('history')) || [];
+    history.push({ score: totalScore, accuracy: accuracy });
     localStorage.setItem('history', JSON.stringify(history));
 
-    displayHistory();
+    // 更新历史记录展示
+    updateHistory();
 }
 
 function generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative) {
@@ -137,7 +141,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                     answer = num1 * num2;
                     break;
                 case 'division':
-                    num2 = num2 === 0 ? 1 : num2;
+                    num2 = num2 === 0 ? 1 : num2; // Avoid division by zero
                     question = `${num1} ÷ ${num2}`;
                     answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                     break;
@@ -158,7 +162,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                             answer = num1 * num2;
                             break;
                         case '÷':
-                            num2 = num2 === 0 ? 1 : num2;
+                            num2 = num2 === 0 ? 1 : num2; // Avoid division by zero
                             question = `${num1} ÷ ${num2}`;
                             answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                             break;
@@ -189,30 +193,18 @@ function generateOptions(correctAnswer, range, allowDecimals) {
     return options.sort(() => Math.random() - 0.5);
 }
 
-function displayHistory() {
+function updateHistory() {
+    const history = JSON.parse(localStorage.getItem('history')) || [];
     const historyContainer = document.getElementById('history');
-    historyContainer.innerHTML = '<h3>历史记录</h3>';
-
-    if (history.length === 0) {
-        historyContainer.innerHTML += '<p>暂无记录</p>';
-    } else {
-        const table = document.createElement('table');
-        table.innerHTML = '<tr><th>日期</th><th>得分</th><th>正确率</th></tr>';
-        history.forEach(record => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${record.date}</td><td>${record.score}</td><td>${record.accuracy}%</td>`;
-            table.appendChild(row);
-        });
-        historyContainer.appendChild(table);
-    }
+    historyContainer.innerHTML = '<h3>历史得分</h3>';
+    history.forEach((entry, index) => {
+        const entryDiv = document.createElement('div');
+        entryDiv.innerText = `第${index + 1}次: 得分${entry.score}分, 正确率${entry.accuracy}%`;
+        historyContainer.appendChild(entryDiv);
+    });
 }
 
 function clearHistory() {
     localStorage.removeItem('history');
-    history = [];
-    displayHistory();
+    updateHistory();
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    displayHistory();
-});
