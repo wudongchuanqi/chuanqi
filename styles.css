@@ -68,7 +68,14 @@ button:hover {
     background-color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    color: #FF5722; /* 默认显示答案 */
+}
+
+#options.selection-mode button {
+    color: #FF5722; /* 默认显示答案，仅选择模式 */
+}
+
+#options.answer-mode button {
+    color: #fff; /* 作答模式不显示答案 */
 }
 
 #options button:hover, #options button:focus {
