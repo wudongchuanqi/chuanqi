@@ -88,8 +88,17 @@ function checkAnswer(selectedOption) {
 
 function endGame() {
     document.getElementById('game').style.display = 'none';
+    
+    // 计算正确率和每题平均得分
+    const 正确率 = (score / questions.length) * 100;
+    const 每题平均得分 = (score / questions.length) * 100;
+
+    // 显示结果
     const result = document.createElement('div');
-    result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${score}/${questions.length}</p>`;
+    result.innerHTML = `
+        <h2>游戏结束!</h2>
+        <p>你的得分是: ${score} / ${questions.length} (${正确率.toFixed(2)}%)</p>
+        <p>平均每题得分: ${每题平均得分.toFixed(2)}</p>`;
     document.body.appendChild(result);
 }
 
