@@ -71,7 +71,7 @@ button:hover {
     color: #FF5722; /* 默认显示答案 */
 }
 
-#options button:hover {
+#options button:hover, #options button:focus {
     background-color: #FF5722;
     color: #fff;
 }
