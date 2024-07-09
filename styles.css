@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: 'Comic Sans MS', cursive, sans-serif;
     display: flex;
     justify-content: center;
@@ -84,4 +84,25 @@ button:hover {
     font-size: 20px;
     margin-top: 10px;
     color: green;
+}
+
+ */
+
+#options button {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #FF5722;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    color: #FF5722; /* 默认显示答案 */
+}
+
+#options button:hover, #options button:focus {
+    background-color: #FF5722;
+    color: #fff;
 }
