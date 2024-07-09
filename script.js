@@ -3,7 +3,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timer;
 let timePerQuestion;
-let mode; // 增加模式变量
+let mode;
 
 function startGame() {
     const operation = document.getElementById('operation').value;
@@ -13,7 +13,7 @@ function startGame() {
     timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
     const allowDecimals = document.getElementById('allowDecimals').checked;
     const allowNegative = document.getElementById('allowNegative').checked;
-    mode = document.querySelector('input[name="mode"]:checked').value; // 获取模式值
+    mode = document.getElementById('mode').value;
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
@@ -43,8 +43,11 @@ function showQuestion() {
         optionsContainer.classList.add('answer-mode');
         optionsContainer.classList.remove('selection-mode');
         const button = document.createElement('button');
-        button.innerText = currentQuestion.answer; // 只显示正确答案
-        button.onclick = () => checkAnswer(currentQuestion.answer);
+        button.innerText = '点击显示答案'; // 不直观显示
+        button.onclick = () => {
+            button.innerText = currentQuestion.answer; // 点击后显示答案
+            checkAnswer(currentQuestion.answer);
+        };
         optionsContainer.appendChild(button);
     }
 
