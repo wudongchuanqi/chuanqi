@@ -6,14 +6,28 @@ let timePerQuestion;
 let mode; // 增加模式变量
 
 function startGame() {
-    const operation = document.getElementById('operation').value;
-    const range = parseInt(document.getElementById('range').value);
-    const resultRange = parseInt(document.getElementById('resultRange').value);
-    const numQuestions = parseInt(document.getElementById('numQuestions').value);
-    timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
-    const allowDecimals = document.getElementById('allowDecimals').checked;
-    const allowNegative = document.getElementById('allowNegative').checked;
-    mode = document.querySelector('input[name="mode"]:checked').value; // 获取模式值
+    const operationElement = document.getElementById('operation');
+    const rangeElement = document.getElementById('range');
+    const resultRangeElement = document.getElementById('resultRange');
+    const numQuestionsElement = document.getElementById('numQuestions');
+    const timePerQuestionElement = document.getElementById('timePerQuestion');
+    const allowDecimalsElement = document.getElementById('allowDecimals');
+    const allowNegativeElement = document.getElementById('allowNegative');
+    const modeElement = document.querySelector('input[name="mode"]:checked');
+
+    if (!operationElement || !rangeElement || !resultRangeElement || !numQuestionsElement || !timePerQuestionElement || !allowDecimalsElement || !allowNegativeElement || !modeElement) {
+        console.error('One or more elements are missing');
+        return;
+    }
+
+    const operation = operationElement.value;
+    const range = parseInt(rangeElement.value);
+    const resultRange = parseInt(resultRangeElement.value);
+    const numQuestions = parseInt(numQuestionsElement.value);
+    timePerQuestion = parseInt(timePerQuestionElement.value);
+    const allowDecimals = allowDecimalsElement.checked;
+    const allowNegative = allowNegativeElement.checked;
+    mode = modeElement.value;
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
