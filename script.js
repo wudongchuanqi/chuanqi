@@ -17,6 +17,14 @@ function startGame() {
 
     if (!operationElement || !rangeElement || !resultRangeElement || !numQuestionsElement || !timePerQuestionElement || !allowDecimalsElement || !allowNegativeElement || !modeElement) {
         console.error('One or more elements are missing');
+        if (!operationElement) console.error('Missing element: operation');
+        if (!rangeElement) console.error('Missing element: range');
+        if (!resultRangeElement) console.error('Missing element: resultRange');
+        if (!numQuestionsElement) console.error('Missing element: numQuestions');
+        if (!timePerQuestionElement) console.error('Missing element: timePerQuestion');
+        if (!allowDecimalsElement) console.error('Missing element: allowDecimals');
+        if (!allowNegativeElement) console.error('Missing element: allowNegative');
+        if (!modeElement) console.error('Missing element: mode');
         return;
     }
 
@@ -28,6 +36,15 @@ function startGame() {
     const allowDecimals = allowDecimalsElement.checked;
     const allowNegative = allowNegativeElement.checked;
     mode = modeElement.value;
+
+    console.log('Operation:', operation);
+    console.log('Range:', range);
+    console.log('Result Range:', resultRange);
+    console.log('Number of Questions:', numQuestions);
+    console.log('Time per Question:', timePerQuestion);
+    console.log('Allow Decimals:', allowDecimals);
+    console.log('Allow Negative:', allowNegative);
+    console.log('Mode:', mode);
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
