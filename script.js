@@ -6,45 +6,14 @@ let timePerQuestion;
 let mode; // 增加模式变量
 
 function startGame() {
-    const operationElement = document.getElementById('operation');
-    const rangeElement = document.getElementById('range');
-    const resultRangeElement = document.getElementById('resultRange');
-    const numQuestionsElement = document.getElementById('numQuestions');
-    const timePerQuestionElement = document.getElementById('timePerQuestion');
-    const allowDecimalsElement = document.getElementById('allowDecimals');
-    const allowNegativeElement = document.getElementById('allowNegative');
-    const modeElement = document.querySelector('input[name="mode"]:checked');
-
-    if (!operationElement || !rangeElement || !resultRangeElement || !numQuestionsElement || !timePerQuestionElement || !allowDecimalsElement || !allowNegativeElement || !modeElement) {
-        console.error('One or more elements are missing');
-        if (!operationElement) console.error('Missing element: operation');
-        if (!rangeElement) console.error('Missing element: range');
-        if (!resultRangeElement) console.error('Missing element: resultRange');
-        if (!numQuestionsElement) console.error('Missing element: numQuestions');
-        if (!timePerQuestionElement) console.error('Missing element: timePerQuestion');
-        if (!allowDecimalsElement) console.error('Missing element: allowDecimals');
-        if (!allowNegativeElement) console.error('Missing element: allowNegative');
-        if (!modeElement) console.error('Missing element: mode');
-        return;
-    }
-
-    const operation = operationElement.value;
-    const range = parseInt(rangeElement.value);
-    const resultRange = parseInt(resultRangeElement.value);
-    const numQuestions = parseInt(numQuestionsElement.value);
-    timePerQuestion = parseInt(timePerQuestionElement.value);
-    const allowDecimals = allowDecimalsElement.checked;
-    const allowNegative = allowNegativeElement.checked;
-    mode = modeElement.value;
-
-    console.log('Operation:', operation);
-    console.log('Range:', range);
-    console.log('Result Range:', resultRange);
-    console.log('Number of Questions:', numQuestions);
-    console.log('Time per Question:', timePerQuestion);
-    console.log('Allow Decimals:', allowDecimals);
-    console.log('Allow Negative:', allowNegative);
-    console.log('Mode:', mode);
+    const operation = document.getElementById('operation').value;
+    const range = parseInt(document.getElementById('range').value);
+    const resultRange = parseInt(document.getElementById('resultRange').value);
+    const numQuestions = parseInt(document.getElementById('numQuestions').value);
+    timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
+    const allowDecimals = document.getElementById('allowDecimals').checked;
+    const allowNegative = document.getElementById('allowNegative').checked;
+    mode = document.getElementById('mode').value; // 获取模式值
 
     questions = generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative);
     currentQuestionIndex = 0;
@@ -88,7 +57,7 @@ function startTimer() {
             timeLeft--;
             document.getElementById('time').innerText = timeLeft;
         } else {
-            checkAnswer(null); // 时间到，没有选择答案
+            checkAnswer(null); // Times up, no answer selected
         }
     }, 1000);
 }
@@ -111,9 +80,9 @@ function checkAnswer(selectedOption) {
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 2000); // 2秒后显示下一个问题
+        setTimeout(showQuestion, 2000); // Show next question after 2 seconds
     } else {
-        setTimeout(endGame, 2000); // 2秒后结束游戏
+        setTimeout(endGame, 2000); // End game after 2 seconds
     }
 }
 
@@ -147,7 +116,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                     answer = num1 * num2;
                     break;
                 case 'division':
-                    num2 = num2 === 0 ? 1 : num2; // 避免除以0
+                    num2 = num2 === 0 ? 1 : num2; // Avoid division by zero
                     question = `${num1} ÷ ${num2}`;
                     answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                     break;
@@ -168,7 +137,7 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
                             answer = num1 * num2;
                             break;
                         case '÷':
-                            num2 = num2 === 0 ? 1 : num2; // 避免除以0
+                            num2 = num2 === 0 ? 1 : num2; // Avoid division by zero
                             question = `${num1} ÷ ${num2}`;
                             answer = allowDecimals ? parseFloat((num1 / num2).toFixed(2)) : Math.floor(num1 / num2);
                             break;
