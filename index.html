@@ -44,6 +44,16 @@
             <div id="feedback"></div>
             <button onclick="nextQuestion()">下一题</button>
         </div>
+        <div id="result" style="display:none;">
+            <h2>游戏结束!</h2>
+            <p id="finalScore"></p>
+            <p id="accuracy"></p>
+        </div>
+        <div id="leaderboard">
+            <h2>历史统计</h2>
+            <div id="history"></div>
+            <button onclick="clearHistory()">清除历史记录</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
