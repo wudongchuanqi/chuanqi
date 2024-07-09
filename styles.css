@@ -1,87 +1,41 @@
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9f9f9;
-    margin: 0;
-}
-
-.container {
+    font-family: Arial, sans-serif;
     text-align: center;
-    max-width: 400px;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
+    background-color: #f0f0f0;
 }
 
-h1 {
-    color: #FF5722;
+h1, h2 {
+    color: #333;
 }
 
-form label {
+label {
     display: block;
-    margin: 10px 0 5px;
-}
-
-form input, form select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin-top: 10px;
 }
 
 button {
-    background-color: #FF5722;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #E64A19;
-}
-
-#game {
-    margin-top: 20px;
-}
-
-#question {
-    font-size: 24px;
-    margin-bottom: 10px;
+    background-color: #0056b3;
 }
 
 #options button {
-    display: block;
-    width: calc(100% - 20px);
-    margin: 10px auto;
+    display: inline-block;
+    margin: 10px;
     padding: 10px;
-    font-size: 18px;
-    border: 1px solid #FF5722;
-    border-radius: 5px;
-    background-color: #fff;
+    background-color: #6c757d;
+    color: white;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 #options button:hover {
-    background-color: #FF5722;
-    color: #fff;
-}
-
-#timer {
-    margin-top: 20px;
-    font-size: 20px;
-}
-
-#feedback {
-    font-size: 20px;
-    margin-top: 10px;
-    color: green;
+    background-color: #5a6268;
 }
