@@ -6,6 +6,7 @@ let timePerQuestion;
 let mode;
 
 function startGame() {
+    console.log('开始游戏按钮被点击');
     const operation = document.getElementById('operation').value;
     const range = parseInt(document.getElementById('range').value);
     const resultRange = parseInt(document.getElementById('resultRange').value);
@@ -25,6 +26,7 @@ function startGame() {
 }
 
 function showQuestion() {
+    console.log('显示题目');
     const currentQuestion = questions[currentQuestionIndex];
     document.getElementById('question').innerText = currentQuestion.question;
     const optionsContainer = document.getElementById('options');
@@ -52,6 +54,7 @@ function showQuestion() {
 }
 
 function startTimer() {
+    console.log('启动计时器');
     let timeLeft = timePerQuestion;
     document.getElementById('time').innerText = timeLeft;
     
@@ -66,6 +69,7 @@ function startTimer() {
 }
 
 function checkAnswer(selectedOption) {
+    console.log('检查答案');
     clearInterval(timer);
     
     const currentQuestion = questions[currentQuestionIndex];
@@ -90,6 +94,7 @@ function checkAnswer(selectedOption) {
 }
 
 function endGame() {
+    console.log('游戏结束');
     document.getElementById('game').style.display = 'none';
     const result = document.createElement('div');
     result.innerHTML = `<h2>游戏结束!</h2><p>你的得分是: ${score}/${questions.length}</p>`;
@@ -97,6 +102,7 @@ function endGame() {
 }
 
 function generateQuestions(operation, range, resultRange, numQuestions, allowDecimals, allowNegative) {
+    console.log('生成题目');
     const questions = [];
     for (let i = 0; i < numQuestions; i++) {
         let question, answer;
@@ -105,10 +111,76 @@ function generateQuestions(operation, range, resultRange, numQuestions, allowDec
         do {
             num1 = Math.floor(Math.random() * (range + 1));
             num2 = Math.floor(Math.random() * (range + 1));
+            
+            if (allowDecimals) {
+                num1 += Math.random();
+                num2 += Math.random();
+            }
+            
+            if (allowNegative) {
+                if (Math.random() > 0.5) num1 = -num1;
+                if (Math.random() > 0.5) num2 = -num2;
+            }
+
             switch (operation) {
                 case 'addition':
                     question = `${num1} + ${num2}`;
                     answer = num1 + num2;
                     break;
                 case 'subtraction':
-                    question = `${num1}
+                    question = `${num1} - ${num2}`;
+                    answer = num1 - num2;
+                    break;
+                case 'multiplication':
+                    question = `${num1} * ${num2}`;
+                    answer = num1 * num2;
+                    break;
+                case 'division':
+                    if (num2 === 0) continue; // 防止除以零
+                    question = `${num1} / ${num2}`;
+                    answer = num1 / num2;
+                    break;
+                case 'mixed':
+                    const operations = ['+', '-', '*', '/'];
+                    const randomOperation = operations[Math.floor(Math.random() * operations.length)];
+                    switch (randomOperation) {
+                        case '+':
+                            question = `${num1} + ${num2}`;
+                            answer = num1 + num2;
+                            break;
+                        case '-':
+                            question = `${num1} - ${num2}`;
+                            answer = num1 - num2;
+                            break;
+                        case '*':
+                            question = `${num1} * ${num2}`;
+                            answer = num1 * num2;
+                            break;
+                        case '/':
+                            if (num2 === 0) continue; // 防止除以零
+                            question = `${num1} / ${num2}`;
+                            answer = num1 / num2;
+                            break;
+                    }
+                    break;
+            }
+        } while (Math.abs(answer) > resultRange);
+
+        const options = [];
+        if (mode === 'selection') {
+            options.push(answer);
+            while (options.length < 4) {
+                let wrongAnswer;
+                do {
+                    wrongAnswer = Math.floor(Math.random() * (2 * resultRange + 1)) - resultRange;
+                    if (allowDecimals) wrongAnswer += Math.random();
+                } while (options.includes(wrongAnswer) || wrongAnswer === answer);
+                options.push(wrongAnswer);
+            }
+            options.sort(() => Math.random() - 0.5);
+        }
+
+        questions.push({ question, answer, options });
+    }
+    return questions;
+}
