@@ -24,14 +24,16 @@ h1 {
 form label {
     display: block;
     margin: 10px 0 5px;
+    text-align: left;
 }
 
 form input, form select {
-    width: 100%;
+    width: calc(100% - 22px); /* 调整宽度 */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box; /* 添加边框框模型 */
 }
 
 button {
@@ -68,14 +70,6 @@ button:hover {
     background-color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-}
-
-#options.selection-mode button {
-    color: #FF5722; /* 默认显示答案，仅选择模式 */
-}
-
-#options.answer-mode button {
-    color: #fff; /* 作答模式不显示答案 */
 }
 
 #options button:hover, #options button:focus {
