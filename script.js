@@ -113,59 +113,59 @@ function showQuestion(mode) {
     } else {
         const input = document.createElement('input');
         input.type = 'number';
-        input.id = 'answerInput';
+        input.id = 'userAnswer';
         optionsContainer.appendChild(input);
 
-        const button = document.createElement('button');
-        button.innerText = '提交';
-        button.onclick = () => checkAnswer(parseFloat(input.value), mode);
-        optionsContainer.appendChild(button);
+        const submitButton = document.createElement('button');
+        submitButton.innerText = '提交答案';
+        submitButton.onclick = () => checkAnswer(parseFloat(input.value), mode);
+        optionsContainer.appendChild(submitButton);
     }
 
     document.getElementById('feedback').innerText = '';
-    startTimer();
-}
-
-function startTimer() {
-    let timeLeft = timePerQuestion;
-    document.getElementById('time').innerText = timeLeft;
+    document.getElementById('time').innerText = `时间: ${timePerQuestion}秒`;
 
     timer = setInterval(() => {
-        if (timeLeft > 0) {
-            timeLeft--;
-            document.getElementById('time').innerText = timeLeft;
-        } else {
-            checkAnswer(null); // Times up, no answer selected
+        timePerQuestion--;
+        document.getElementById('time').innerText = `时间: ${timePerQuestion}秒`;
+        if (timePerQuestion <= 0) {
+            clearInterval(timer);
+            checkAnswer(null, mode);
         }
     }, 1000);
 }
 
-function checkAnswer(selectedOption, mode) {
+function checkAnswer(userAnswer, mode) {
     clearInterval(timer);
-
     const currentQuestion = questions[currentQuestionIndex];
-    const feedback = document.getElementById('feedback');
 
-    if (selectedOption === currentQuestion.answer) {
+    if (userAnswer === currentQuestion.answer) {
         score++;
-        feedback.innerText = '正确!';
-        feedback.style.color = 'green';
+        document.getElementById('feedback').innerText = '正确！';
+        document.getElementById('feedback').style.color = 'green';
     } else {
-        feedback.innerText = `错误! 正确答案是: ${currentQuestion.answer}`;
-        feedback.style.color = 'red';
+        document.getElementById('feedback').innerText = `错误！正确答案是 ${currentQuestion.answer}`;
+        document.getElementById('feedback').style.color = 'red';
     }
 
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
+        timePerQuestion = parseInt(document.getElementById('timePerQuestion').value);
         setTimeout(() => showQuestion(mode), 1000);
     } else {
-        endGame();
+        showResults();
     }
 }
 
-function endGame() {
-    const correctRate = ((score / questions.length) * 100).toFixed(2);
-    alert(`游戏结束! 你的得分是: ${score}/${questions.length} (${correctRate}%)`);
-    document.getElementById('settingsForm').style.display = 'block';
-    document.getElementById('game').style.display = 'none';
+function showResults() {
+    const totalQuestions = questions.length;
+    const correctAnswers = score;
+    const accuracy = ((correctAnswers / totalQuestions) * 100).toFixed(2);
+
+    document.getElementById('game').innerHTML = `
+        <h2>游戏结束！</h2>
+        <p>你答对了 ${correctAnswers} 题，共 ${totalQuestions} 题。</p>
+        <p>正确率：${accuracy}%</p>
+        <button onclick="location.reload()">再来一次</button>
+    `;
 }
