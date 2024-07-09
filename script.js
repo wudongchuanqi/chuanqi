@@ -35,6 +35,11 @@ function showQuestion() {
             const button = document.createElement('button');
             button.innerText = option;
             button.onclick = () => checkAnswer(option);
+            button.style.display = 'block';
+            button.style.margin = '10px 0';
+            button.style.padding = '10px';
+            button.style.fontSize = '16px';
+            button.style.width = '100%';
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
