@@ -19,8 +19,8 @@ function startGame() {
     currentQuestionIndex = 0;
     score = 0;
 
-    document.getElementById('settingsPage').style.display = 'none';
-    document.getElementById('gamePage').style.display = 'block';
+    document.getElementById('settingsForm').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
     showQuestion();
 }
 
@@ -35,6 +35,13 @@ function showQuestion() {
             const button = document.createElement('button');
             button.innerText = option;
             button.onclick = () => checkAnswer(option);
+            button.style.display = 'block';
+            button.style.margin = '10px 0';
+            button.style.padding = '10px';
+            button.style.fontSize = '16px';
+            button.style.width = '100%';
+            button.style.color = '#FF5722'; // 设置字体颜色
+            button.style.border = 'none';
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
@@ -89,8 +96,9 @@ function checkAnswer(selectedOption) {
         setTimeout(endGame, 2000); // End game after 2 seconds
     }
 }
+
 function endGame() {
-    document.getElementById('gamePage').style.display = 'none';
+    document.getElementById('game').style.display = 'none';
 
     const totalQuestions = questions.length;
     const accuracy = ((score / totalQuestions) * 100).toFixed(2);
@@ -206,4 +214,3 @@ function clearHistory() {
     localStorage.removeItem('history');
     updateHistory();
 }
-
