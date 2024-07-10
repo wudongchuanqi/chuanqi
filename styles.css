@@ -5,39 +5,89 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #f9f9f9;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    max-width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
 }
 
 h1 {
-    text-align: center;
+    color: #FF5722;
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+    text-align: left; /* 调整为左对齐 */
+    padding-left: 20px; /* 增加左侧内边距 */
+}
+
+form input, form select {
+    width: calc(100% - 40px); /* 调整宽度以适应新内边距 */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 20px; /* 新增左边距 */
+}
+
+button {
+    background-color: #FF5722;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #E64A19;
 }
 
 #game {
-    display: none;
+    margin-top: 20px;
 }
 
-.option-button, .answer-button {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 1.2em;
-    cursor: pointer;
-    border: none;
+#question {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#options button {
+    display: block;
+    width: calc(100% - 40px); /* 调整宽度以适应新内边距 */
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #FF5722;
     border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    margin-left: 20px; /* 新增左边距 */
 }
 
-.option-button:hover, .answer-button:hover {
-    background-color: #4caf50;
-    color: white;
+#options button:hover, #options button:focus {
+    background-color: #FF5722;
+    color: #fff;
 }
 
-#history table {
-    width: 100%;
-    border-collapse: collapse;
+#timer {
+    margin-top: 20px;
+    font-size: 20px;
 }
 
-#history th, #history td {
-    border: 1px solid #ddd;
-    padding: 8px;
+#feedback {
+    font-size: 20px;
+    margin-top: 10px;
+    color: green;
 }
 
 #history tr:nth-child(even) {
@@ -49,9 +99,6 @@ h1 {
 }
 
 #history th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4caf50;
-    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
