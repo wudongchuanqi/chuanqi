@@ -2,7 +2,6 @@ let timeLeft = 30;
 let score = 0;
 let timer;
 let currentQuestion;
-let correctAnswer;
 let mode = 'selection';
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -19,6 +18,7 @@ function startGame() {
     mode = document.getElementById('mode').value; // 获取选择的模式
     generateQuestion();
     timer = setInterval(updateTimer, 1000);
+    document.getElementById('game').style.display = 'block';
 }
 
 function updateTimer() {
