@@ -40,15 +40,18 @@ function showQuestion() {
             button.style.padding = '10px';
             button.style.fontSize = '16px';
             button.style.width = '100%';
-            button.style.backgroundColor = '#FF5722'; /* 设置按钮颜色 */
+            button.style.color = '#FF5722'; // 设置字体颜色
             button.style.border = 'none';
-            button.style.color = '#fff';
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
         const button = document.createElement('button');
-        button.innerText = currentQuestion.answer; // 只显示正确答案
+        button.innerText = '?'; // 初始显示为问号
         button.onclick = () => checkAnswer(currentQuestion.answer);
+        button.onmouseover = () => button.innerText = currentQuestion.answer; // 鼠标悬停显示答案
+        button.onmouseleave = () => button.innerText = '?'; // 鼠标移开显示问号
+        button.ontouchstart = () => button.innerText = currentQuestion.answer; // 手机端触摸显示答案
+        button.ontouchend = () => button.innerText = '?'; // 手机端触摸结束显示问号
         optionsContainer.appendChild(button);
     }
 
