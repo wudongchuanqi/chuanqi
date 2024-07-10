@@ -43,17 +43,16 @@ function showQuestion() {
         currentQuestion.options.forEach(option => {
             const button = document.createElement('button');
             button.innerText = option;
+            button.className = 'option-button'; // 添加类名
             button.onclick = () => checkAnswer(option);
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = 'userAnswer';
-        optionsContainer.appendChild(input);
+        // 移除输入框，显示默认问号按钮
         const button = document.createElement('button');
-        button.innerText = '提交';
-        button.onclick = () => checkAnswer(input.value);
+        button.innerText = '?';
+        button.className = 'answer-button'; // 添加类名
+        button.onclick = () => checkAnswer(currentQuestion.answer);
         optionsContainer.appendChild(button);
     }
 
