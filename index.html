@@ -35,15 +35,15 @@
             <input type="checkbox" id="allowDecimals">
             <label for="allowNegative">允许负数:</label>
             <input type="checkbox" id="allowNegative">
-            <button type="button" id="startButton">开始游戏</button>
+            <button type="button" onclick="startGame()">开始游戏</button>
         </form>
-        <div id="game">
+        <div id="game" style="display:none;">
             <div id="question"></div>
             <div id="options"></div>
             <div id="timer">剩余时间：<span id="time">30</span>秒</div>
             <div id="score">得分：<span id="points">0</span></div>
-            <button id="nextButton">下一题</button>
-            <button id="clearHistoryButton">清除历史记录</button>
+            <button onclick="nextQuestion()">下一题</button>
+            <button onclick="clearHistory()">清除历史记录</button>
         </div>
     </div>
     <script src="script.js"></script>
