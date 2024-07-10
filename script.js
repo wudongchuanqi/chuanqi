@@ -1,25 +1,20 @@
-let timeLeft = 30;
+let timeLeft;
 let score = 0;
 let timer;
 let currentQuestion;
-let mode = 'selection';
+let mode;
 let history = [];
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('startButton').addEventListener('click', startGame);
-    document.getElementById('nextButton').addEventListener('click', nextQuestion);
-    document.getElementById('clearHistoryButton').addEventListener('click', clearHistory);
-});
 
 function startGame() {
     score = 0;
-    timeLeft = 30;
+    timeLeft = parseInt(document.getElementById('timePerQuestion').value);
+    mode = document.getElementById('mode').value;
     document.getElementById('points').innerText = score;
     document.getElementById('time').innerText = timeLeft;
-    mode = document.getElementById('mode').value; // 获取选择的模式
+    document.getElementById('settingsForm').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
     generateQuestion();
     timer = setInterval(updateTimer, 1000);
-    document.getElementById('game').style.display = 'block';
 }
 
 function updateTimer() {
@@ -29,6 +24,8 @@ function updateTimer() {
     } else {
         clearInterval(timer);
         alert('时间到！您的得分是：' + score);
+        document.getElementById('settingsForm').style.display = 'block';
+        document.getElementById('game').style.display = 'none';
     }
 }
 
