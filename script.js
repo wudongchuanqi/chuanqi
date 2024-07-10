@@ -2,17 +2,18 @@ let timeLeft;
 let score = 0;
 let timer;
 let currentQuestion;
-let mode;
+let correctAnswers = 0;
 let history = [];
 
 function startGame() {
+    document.getElementById('mainContainer').style.display = 'none';
+    document.getElementById('gameContainer').style.display = 'block';
+
     score = 0;
+    correctAnswers = 0;
     timeLeft = parseInt(document.getElementById('timePerQuestion').value);
-    mode = document.getElementById('mode').value;
     document.getElementById('points').innerText = score;
     document.getElementById('time').innerText = timeLeft;
-    document.getElementById('settingsForm').style.display = 'none';
-    document.getElementById('game').style.display = 'block';
     generateQuestion();
     timer = setInterval(updateTimer, 1000);
 }
@@ -22,16 +23,13 @@ function updateTimer() {
         timeLeft--;
         document.getElementById('time').innerText = timeLeft;
     } else {
-        clearInterval(timer);
-        alert('时间到！您的得分是：' + score);
-        document.getElementById('settingsForm').style.display = 'block';
-        document.getElementById('game').style.display = 'none';
+        checkAnswer(false);
     }
 }
 
 function generateQuestion() {
-    const num1 = Math.floor(Math.random() * 10) + 1;
-    const num2 = Math.floor(Math.random() * 10) + 1;
+    const num1 = Math.floor(Math.random() * parseInt(document.getElementById('range').value)) + 1;
+    const num2 = Math.floor(Math.random() * parseInt(document.getElementById('range').value)) + 1;
     const operators = ['+', '-', '*', '/'];
     const operator = operators[Math.floor(Math.random() * operators.length)];
     currentQuestion = { num1, num2, operator };
@@ -58,66 +56,65 @@ function generateQuestion() {
 
     document.getElementById('question').innerText = questionText;
 
-    if (mode === 'selection') {
-        document.getElementById('options').innerHTML = '';
-
-        const correctOption = document.createElement('button');
-        correctOption.innerText = currentQuestion.answer;
-        correctOption.className = 'option-btn';
-        correctOption.addEventListener('click', () => checkAnswer(true));
-        document.getElementById('options').appendChild(correctOption);
-
-        for (let i = 0; i < 2; i++) {
-            const wrongOption = document.createElement('button');
-            let wrongAnswer;
-            do {
-                wrongAnswer = Math.floor(Math.random() * 20) - 10;
-            } while (wrongAnswer === currentQuestion.answer);
-
-            wrongOption.innerText = wrongAnswer;
-            wrongOption.className = 'option-btn';
-            wrongOption.addEventListener('click', () => checkAnswer(false));
-            document.getElementById('options').appendChild(wrongOption);
+    const options = [];
+    while (options.length < 4) {
+        const randomOption = (Math.random() * (num1 + num2 * 2)).toFixed(2);
+        if (!options.includes(randomOption)) {
+            options.push(randomOption);
         }
-
-        // Randomize the order of options
-        for (let i = document.getElementById('options').children.length; i >= 0; i--) {
-            document.getElementById('options').appendChild(document.getElementById('options').children[Math.random() * i | 0]);
-        }
-    } else if (mode === 'answer') {
-        document.getElementById('options').innerHTML = '';
-
-        const correctOption = document.createElement('button');
-        correctOption.innerText = '?';
-        correctOption.className = 'option-btn';
-        correctOption.addEventListener('mouseover', () => revealAnswer(correctOption));
-        correctOption.addEventListener('mouseout', () => hideAnswer(correctOption));
-        correctOption.addEventListener('click', () => checkAnswer(true));
-        document.getElementById('options').appendChild(correctOption);
     }
+    if (!options.includes(currentQuestion.answer.toString())) {
+        options[Math.floor(Math.random() * 4)] = currentQuestion.answer.toString();
+    }
+
+    const optionsContainer = document.getElementById('options');
+    optionsContainer.innerHTML = '';
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.innerText = option;
+        button.onclick = () => checkAnswer(option);
+        optionsContainer.appendChild(button);
+    });
 }
 
-function revealAnswer(button) {
-    button.innerText = currentQuestion.answer;
-}
+function checkAnswer(userAnswer) {
+    clearInterval(timer);
 
-function hideAnswer(button) {
-    button.innerText = '?';
-}
-
-function checkAnswer(isCorrect) {
-    if (isCorrect) {
+    if (userAnswer === currentQuestion.answer.toString()) {
         score++;
-        document.getElementById('points').innerText = score;
+        correctAnswers++;
     }
-    generateQuestion();
+
+    document.getElementById('points').innerText = score;
+
+    const numQuestions = parseInt(document.getElementById('numQuestions').value);
+    if (correctAnswers < numQuestions) {
+        generateQuestion();
+        timeLeft = parseInt(document.getElementById('timePerQuestion').value);
+        timer = setInterval(updateTimer, 1000);
+    } else {
+        endGame();
+    }
 }
 
-function nextQuestion() {
-    generateQuestion();
+function endGame() {
+    clearInterval(timer);
+    const correctRate = (correctAnswers / parseInt(document.getElementById('numQuestions').value)) * 100;
+    const totalScore = (correctRate / 100) * 100;
+    let message = `游戏结束！\n你的得分是：${totalScore.toFixed(2)}分，正确率为：${correctRate.toFixed(2)}%`;
+    if (totalScore === 100) {
+        const compliments = ['太棒了！', '非常好！', '你真是天才！'];
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+        message += ` ${randomCompliment}`;
+    }
+    alert(message);
+    history.push({ score: totalScore.toFixed(2), correctRate: correctRate.toFixed(2) });
+    updateHistory();
+
+    document.getElementById('mainContainer').style.display = 'block';
+    document.getElementById('gameContainer').style.display = 'none';
 }
 
-function clearHistory() {
-    history = [];
-    alert('历史记录已清除');
+function updateHistory() {
+    console.log('历史记录:', history);
 }
