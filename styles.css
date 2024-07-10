@@ -24,14 +24,17 @@ h1 {
 form label {
     display: block;
     margin: 10px 0 5px;
+    text-align: left; /* 调整为左对齐 */
+    padding-left: 20px; /* 增加左侧内边距 */
 }
 
 form input, form select {
-    width: 100%;
+    width: calc(100% - 40px); /* 调整宽度以适应新内边距 */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-left: 20px; /* 新增左边距 */
 }
 
 button {
@@ -59,7 +62,7 @@ button:hover {
 
 #options button {
     display: block;
-    width: calc(100% - 20px);
+    width: calc(100% - 40px); /* 调整宽度以适应新内边距 */
     margin: 10px auto;
     padding: 10px;
     font-size: 18px;
@@ -68,10 +71,10 @@ button:hover {
     background-color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    color: #FF5722; /* 默认显示答案 */
+    margin-left: 20px; /* 新增左边距 */
 }
 
-#options button:hover {
+#options button:hover, #options button:focus {
     background-color: #FF5722;
     color: #fff;
 }
