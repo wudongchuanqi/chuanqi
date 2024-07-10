@@ -3,6 +3,7 @@ let score = 0;
 let timer;
 let currentQuestion;
 let mode = 'selection';
+let history = [];
 
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('startButton').addEventListener('click', startGame);
@@ -116,6 +117,6 @@ function nextQuestion() {
 }
 
 function clearHistory() {
-    // Clear history logic (to be implemented)
+    history = [];
     alert('历史记录已清除');
 }
