@@ -50,6 +50,7 @@ button:hover {
 
 #game {
     margin-top: 20px;
+    display: none;
 }
 
 #question {
