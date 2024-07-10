@@ -68,7 +68,7 @@ button:hover {
     background-color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    color: #FF5722;
+    color: #FF5722; /* 默认显示答案 */
 }
 
 #options button:hover {
@@ -81,7 +81,8 @@ button:hover {
     font-size: 20px;
 }
 
-#score {
+#feedback {
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
+    color: green;
 }
