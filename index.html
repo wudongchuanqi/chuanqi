@@ -1,51 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数学口算游戏</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>数学口算游戏</h1>
-        <form id="settingsForm">
-            <label for="operation">选择运算类型:</label>
-            <select id="operation">
-                <option value="addition">加法</option>
-                <option value="subtraction">减法</option>
-                <option value="multiplication">乘法</option>
-                <option value="division">除法</option>
-                <option value="mixed">混合运算</option>
-            </select>
-            <label for="mode">选择互动模式:</label>
-            <select id="mode">
-                <option value="answer">作答模式</option>
-                <option value="selection">选择模式</option>
-            </select>
-            <label for="range">选择数字范围:</label>
-            <input type="number" id="range" min="1" value="10">
-            <label for="resultRange">选择结果范围:</label>
-            <input type="number" id="resultRange" min="1" value="10">
-            <label for="numQuestions">选择题目数量:</label>
-            <input type="number" id="numQuestions" min="1" value="10">
-            <label for="timePerQuestion">每题答题时间（秒）:</label>
-            <input type="number" id="timePerQuestion" min="1" value="10">
-            <label for="allowDecimals">允许小数:</label>
-            <input type="checkbox" id="allowDecimals">
-            <label for="allowNegative">允许负数:</label>
-            <input type="checkbox" id="allowNegative">
-            <button type="button" id="startButton">开始游戏</button>
-        </form>
-        <div id="game">
-            <div id="question"></div>
-            <div id="options"></div>
-            <div id="timer">剩余时间：<span id="time">30</span>秒</div>
-            <div id="score">得分：<span id="points">0</span></div>
-            <button id="nextButton">下一题</button>
-            <button id="clearHistoryButton">清除历史记录</button>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+let timeLeft = 30;
+let score = 0;
+let timer;
+let currentQuestion;
+let mode = 'selection';
+let history = [];
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('startButton').addEventListener('click', startGame);
+    document.getElementById('nextButton').addEventListener('click', nextQuestion);
+    document.getElementById('clearHistoryButton').addEventListener('click', clearHistory);
+});
+
+function startGame() {
+    score = 0;
+    timeLeft = 30;
+    document.getElementById('points').innerText = score;
+    document.getElementById('time').innerText = timeLeft;
+    mode = document.getElementById('mode').value; // 获取选择的模式
+    generateQuestion();
+    timer = setInterval(updateTimer, 1000);
+    document.getElementById('game').style.display = 'block';
+}
+
+function updateTimer() {
+    if (timeLeft > 0) {
+        timeLeft--;
+        document.getElementById('time').innerText = timeLeft;
+    } else {
+        clearInterval(timer);
+        alert('时间到！您的得分是：' + score);
+    }
+}
+
+function generateQuestion() {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    const operators = ['+', '-', '*', '/'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    currentQuestion = { num1, num2, operator };
+    let questionText;
+
+    switch (operator) {
+        case '+':
+            questionText = `${num1} + ${num2}`;
+            currentQuestion.answer = num1 + num2;
+            break;
+        case '-':
+            questionText = `${num1} - ${num2}`;
+            currentQuestion.answer = num1 - num2;
+            break;
+        case '*':
+            questionText = `${num1} * ${num2}`;
+            currentQuestion.answer = num1 * num2;
+            break;
+        case '/':
+            questionText = `${num1} / ${num2}`;
+            currentQuestion.answer = parseFloat((num1 / num2).toFixed(2));
+            break;
+    }
+
+    document.getElementById('question').innerText = questionText;
+
+    if (mode === 'selection') {
+        document.getElementById('options').innerHTML = '';
+
+        const correctOption = document.createElement('button');
+        correctOption.innerText = currentQuestion.answer;
+        correctOption.className = 'option-btn';
+        correctOption.addEventListener('click', () => checkAnswer(true));
+        document.getElementById('options').appendChild(correctOption);
+
+        for (let i = 0; i < 2; i++) {
+            const wrongOption = document.createElement('button');
+            let wrongAnswer;
+            do {
+                wrongAnswer = Math.floor(Math.random() * 20) - 10;
+            } while (wrongAnswer === currentQuestion.answer);
+
+            wrongOption.innerText = wrongAnswer;
+            wrongOption.className = 'option-btn';
+            wrongOption.addEventListener('click', () => checkAnswer(false));
+            document.getElementById('options').appendChild(wrongOption);
+        }
+
+        // Randomize the order of options
+        for (let i = document.getElementById('options').children.length; i >= 0; i--) {
+            document.getElementById('options').appendChild(document.getElementById('options').children[Math.random() * i | 0]);
+        }
+    } else if (mode === 'answer') {
+        document.getElementById('options').innerHTML = '';
+
+        const correctOption = document.createElement('button');
+        correctOption.innerText = '?';
+        correctOption.className = 'option-btn';
+        correctOption.addEventListener('mouseover', () => revealAnswer(correctOption));
+        correctOption.addEventListener('mouseout', () => hideAnswer(correctOption));
+        correctOption.addEventListener('click', () => checkAnswer(true));
+        document.getElementById('options').appendChild(correctOption);
+    }
+}
+
+function revealAnswer(button) {
+    button.innerText = currentQuestion.answer;
+}
+
+function hideAnswer(button) {
+    button.innerText = '?';
+}
+
+function checkAnswer(isCorrect) {
+    if (isCorrect) {
+        score++;
+        document.getElementById('points').innerText = score;
+    }
+    generateQuestion();
+}
+
+function nextQuestion() {
+    generateQuestion();
+}
+
+function clearHistory() {
+    history = [];
+    alert('历史记录已清除');
+}
