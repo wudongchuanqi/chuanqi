@@ -5,74 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数学口算游戏</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f9f9f9;
-            margin: 0;
-        }
-
-        .container {
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-        }
-
-        h1 {
-            color: #FF5722;
-        }
-
-        form label {
-            display: block;
-            margin: 10px 0 5px;
-            text-align: left;
-            padding-left: 20px;
-        }
-
-        form input, form select {
-            width: calc(100% - 40px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-left: 20px;
-        }
-
-        button {
-            background-color: #FF5722;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #E64A19;
-        }
-
-        @media screen and (min-width: 768px) {
-            .container {
-                width: 50%;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <h1>数学口算游戏</h1>
-        <p id="welcomeText">欢迎来到数学口算游戏！选择您的游戏设置然后开始挑战吧。</p>
         <form id="settingsForm">
             <label for="operation">选择运算类型:</label>
             <select id="operation">
@@ -101,6 +37,15 @@
             <input type="checkbox" id="allowNegative">
             <button type="button" onclick="startGame()">开始游戏</button>
         </form>
+        <div id="game" style="display:none;">
+            <div id="question"></div>
+            <div id="options"></div>
+            <div id="timer">剩余时间：<span id="time">0</span>秒</div>
+            <div id="feedback"></div>
+            <button onclick="nextQuestion()">下一题</button>
+        </div>
+        <div id="history"></div>
+        <button onclick="clearHistory()">清除历史记录</button>
     </div>
     <script src="script.js"></script>
 </body>
