@@ -4,8 +4,6 @@ let score = 0;
 let timer;
 let timePerQuestion;
 let mode;
-
-// 历史统计数据
 let history = JSON.parse(localStorage.getItem('history')) || [];
 
 function startGame() {
@@ -64,7 +62,7 @@ function startTimer() {
             timeLeft--;
             document.getElementById('time').innerText = timeLeft;
         } else {
-            checkAnswer(null); 
+            checkAnswer(null);
         }
     }, 1000);
 }
@@ -87,9 +85,9 @@ function checkAnswer(selectedOption) {
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
-        setTimeout(showQuestion, 2000); 
+        setTimeout(showQuestion, 2000);
     } else {
-        setTimeout(endGame, 2000); 
+        setTimeout(endGame, 2000);
     }
 }
 
