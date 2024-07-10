@@ -65,13 +65,13 @@ button:hover {
     font-size: 18px;
     border: 1px solid #FF5722;
     border-radius: 5px;
-    background-color: #fff; /* 初始白色背景 */
+    background-color: #fff;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    color: #FF5722; /* 初始橙色字体 */
+    color: #FF5722; /* 默认显示答案 */
 }
 
-#options button:hover, #options button:focus {
+#options button:hover {
     background-color: #FF5722;
     color: #fff;
 }
