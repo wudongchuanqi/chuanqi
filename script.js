@@ -40,6 +40,9 @@ function showQuestion() {
             button.style.padding = '10px';
             button.style.fontSize = '16px';
             button.style.width = '100%';
+            button.style.backgroundColor = '#FF5722'; /* 设置按钮颜色 */
+            button.style.border = 'none';
+            button.style.color = '#fff';
             optionsContainer.appendChild(button);
         });
     } else if (mode === 'answer') {
