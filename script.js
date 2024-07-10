@@ -88,26 +88,30 @@ function generateQuestion() {
             document.getElementById('options').appendChild(document.getElementById('options').children[Math.random() * i | 0]);
         }
     } else if (mode === 'answer') {
-        document.getElementById('options').innerHTML = `
-            <input type="text" id="answer" placeholder="输入答案">
-            <button onclick="checkAnswer()">提交</button>
-        `;
+        document.getElementById('options').innerHTML = '';
+
+        const correctOption = document.createElement('button');
+        correctOption.innerText = '?';
+        correctOption.className = 'option-btn';
+        correctOption.addEventListener('mouseover', () => revealAnswer(correctOption));
+        correctOption.addEventListener('mouseout', () => hideAnswer(correctOption));
+        correctOption.addEventListener('click', () => checkAnswer(true));
+        document.getElementById('options').appendChild(correctOption);
     }
 }
 
+function revealAnswer(button) {
+    button.innerText = currentQuestion.answer;
+}
+
+function hideAnswer(button) {
+    button.innerText = '?';
+}
+
 function checkAnswer(isCorrect) {
-    if (mode === 'selection') {
-        if (isCorrect) {
-            score++;
-            document.getElementById('points').innerText = score;
-        }
-    } else if (mode === 'answer') {
-        const userAnswer = parseFloat(document.getElementById('answer').value);
-        if (userAnswer === currentQuestion.answer) {
-            score++;
-            document.getElementById('points').innerText = score;
-        }
-        document.getElementById('answer').value = '';
+    if (isCorrect) {
+        score++;
+        document.getElementById('points').innerText = score;
     }
     generateQuestion();
 }
